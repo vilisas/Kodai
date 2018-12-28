@@ -13,13 +13,14 @@ import java.util.List;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
 import lt.sutemos.kodai.Model.Irasas;
-import lt.sutemos.kodai.Services.CodeFactory;
+import lt.sutemos.kodai.Services.CodeList;
 import lt.sutemos.kodai.Utils.KeyboardTools;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<Irasas> irasai;
+    private CodeList kodai;
     private ImageButton searchButton;
     private EditText searchEditText;
     private ImageButton clearTextButton;
@@ -37,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewID);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        irasai = new ArrayList<>();
-        CodeFactory.load();
-        irasai = CodeFactory.get();
-        adapter = new MyAdapter(this, irasai);
+//        irasai = (List<Irasas>) new CodeList();
+
+        kodai = new CodeList();
+        adapter = new MyAdapter(this, kodai.get());
         recyclerView.setAdapter(adapter);
 
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     protected void search(){
-        irasai = CodeFactory.find(searchEditText.getText().toString());
+        irasai = kodai.find(searchEditText.getText().toString());
         if (irasai != null) {
             adapter = new MyAdapter(getApplicationContext(), irasai);
             recyclerView.setAdapter(adapter);

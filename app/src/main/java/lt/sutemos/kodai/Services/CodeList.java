@@ -5,13 +5,18 @@ import java.util.List;
 
 import lt.sutemos.kodai.Model.Irasas;
 
-public class CodeFactory {
-    private static List<Irasas> irasai;
+public class CodeList {
+    private List<Irasas> irasai;
+
+    public CodeList(){
+        irasai = new ArrayList<>();
+        this.load();
+    }
 
     /*
      * generates dummy codes for now
      */
-    public static void load(){
+    public void load(){
 
         irasai = new ArrayList<>();
         for (int i = 1; i<=25; i++){
@@ -23,11 +28,11 @@ public class CodeFactory {
         }
     }
 
-    public static List<Irasas> get(){
+    public List<Irasas> get(){
         return irasai;
     }
 
-    public static List<Irasas> find(String keyword){
+    public List<Irasas> find(String keyword){
         List<Irasas> returnList = new ArrayList<>();
 
         keyword = keyword.toLowerCase();
