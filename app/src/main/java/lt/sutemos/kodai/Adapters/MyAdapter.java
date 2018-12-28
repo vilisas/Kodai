@@ -67,6 +67,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Irasas irasas = listItems.get(position);
             Toast.makeText(context, irasas.getAdresas() + " " + irasas.getKodas(),
                     Toast.LENGTH_LONG).show();
+            codeList.delete(irasas.getId());
+            notifyDataSetChanged();
+//            listItems = kodaiViewModel.get();
+
 
 
 
