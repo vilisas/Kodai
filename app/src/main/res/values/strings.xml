@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kodai</string>
+    <string name="searchHint">Paieška</string>
+    <string name="adresas">Adresas</string>
+    <string name="kodas">Kodas</string>
+    <string name="new_entry">Naujas įrašas</string>
+</resources>
