@@ -3,10 +3,11 @@ package lt.sutemos.kodai.Services;
 import java.util.ArrayList;
 import java.util.List;
 
-import lt.sutemos.kodai.Model.Irasas;
+import lt.sutemos.kodai.Models.Irasas;
 
 public class CodeList {
     private List<Irasas> irasai;
+    private int id = 0;
 
     public CodeList(){
         irasai = new ArrayList<>();
@@ -20,11 +21,7 @@ public class CodeList {
 
         irasai = new ArrayList<>();
         for (int i = 1; i<=25; i++){
-            Irasas irasas = new Irasas(
-                    "Bijūno " + i,
-                    i + " kart paperst"
-            );
-            irasai.add(irasas);
+            this.add("Bijūno " + i, i + " kart paperst");
         }
     }
 
@@ -35,7 +32,6 @@ public class CodeList {
     public List<Irasas> find(String keyword){
         List<Irasas> returnList = new ArrayList<>();
 
-        keyword = keyword.toLowerCase();
         if (keyword== null) {
             return irasai;
         }
@@ -43,6 +39,7 @@ public class CodeList {
             return irasai;
         }
 
+        keyword = keyword.toLowerCase();
         // return if something matches
 
         for (int i = 0; i < irasai.size(); i++){
@@ -53,6 +50,29 @@ public class CodeList {
         }
         return returnList;
 
+    }
+
+    public void add(String adresas, String kodas){
+        irasai.add(new Irasas(id++, adresas,kodas));
+    }
+
+    private int getPositionById(int id){
+        for (int i = 0; i < irasai.size(); i++){
+            Irasas irasas = irasai.get(i);
+            if (irasas.getId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean delete(int id){
+        int position = getPositionById(id);
+        if (position <0) {
+            return false;
+        } else{
+            return (irasai.remove(position) != null);
+        }
     }
 
     public int size(){

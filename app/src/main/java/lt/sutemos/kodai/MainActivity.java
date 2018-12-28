@@ -14,9 +14,9 @@ import android.widget.ImageButton;
 import java.util.List;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
-import lt.sutemos.kodai.Model.Irasas;
+import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Utils.KeyboardTools;
-import lt.sutemos.kodai.ViewModelProviders.KodaiViewModel;
+import lt.sutemos.kodai.Models.KodaiViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 //        irasai = (List<Irasas>) new CodeList();
 
 //        kodai = new CodeList();
-        adapter = new MyAdapter(this, kodaiViewModel.get());
+        adapter = new MyAdapter(this, kodaiViewModel);
         recyclerView.setAdapter(adapter);
 
 
@@ -78,11 +78,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     protected void search(){
-        List<Irasas> irasai = kodaiViewModel.find(searchEditText.getText().toString());
-        if (irasai != null) {
-            adapter = new MyAdapter(getApplicationContext(), irasai);
+//        List<Irasas> irasai = kodaiViewModel.find(searchEditText.getText().toString());
+//        if (irasai != null) {
+
+
+            kodaiViewModel.setFilter(searchEditText.getText().toString());
+            adapter = new MyAdapter(getApplicationContext(), kodaiViewModel);
             recyclerView.setAdapter(adapter);
-        }
+//        }
         KeyboardTools.hide(this);
 
     }

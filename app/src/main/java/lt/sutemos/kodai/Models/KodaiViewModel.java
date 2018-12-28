@@ -1,15 +1,16 @@
-package lt.sutemos.kodai.ViewModelProviders;
+package lt.sutemos.kodai.Models;
 
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.StringRes;
 
 import java.util.List;
 
-import lt.sutemos.kodai.Model.Irasas;
 import lt.sutemos.kodai.Services.CodeList;
 
 public class KodaiViewModel extends ViewModel {
 
     private CodeList kodai;
+    private String filter;
 
     public KodaiViewModel(){
         kodai = new CodeList();
@@ -21,12 +22,25 @@ public class KodaiViewModel extends ViewModel {
     }
 
     public List<Irasas> get(){
-        return kodai.get();
+        return kodai.find(filter);
     }
 
-    public List<Irasas> find(String s){
-        return kodai.find(s);
+    public List<Irasas> find(String filterText){
+        setFilter(filterText);
+        return get();
     }
+    public void setFilter(String filterText){
+        this.filter = filterText;
+    }
+
+
+    public void add(String adresas, String kodas){
+        kodai.add(adresas,kodas);
+    }
+    public boolean delete(int id){
+        return kodai.delete(id);
+    }
+
 
 
 

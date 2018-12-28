@@ -11,17 +11,21 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import lt.sutemos.kodai.Model.Irasas;
+import lt.sutemos.kodai.Models.Irasas;
+import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.R;
+import lt.sutemos.kodai.Services.CodeList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private Context context;
     private List<Irasas> listItems;
+    private KodaiViewModel codeList;
 
-    public MyAdapter(Context context, List listItem) {
+    public MyAdapter(Context context, KodaiViewModel kodaiViewModel) {
         this.context = context;
-        this.listItems = listItem;
+        this.codeList = kodaiViewModel;
+        this.listItems = kodaiViewModel.get();
     }
 
 
@@ -63,6 +67,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Irasas irasas = listItems.get(position);
             Toast.makeText(context, irasas.getAdresas() + " " + irasas.getKodas(),
                     Toast.LENGTH_LONG).show();
+
+
 
         }
     }
