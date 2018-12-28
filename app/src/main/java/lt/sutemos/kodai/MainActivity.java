@@ -1,5 +1,7 @@
 package lt.sutemos.kodai;
 
+
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +15,23 @@ import java.util.List;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
 import lt.sutemos.kodai.Model.Irasas;
-import lt.sutemos.kodai.Services.CodeList;
 import lt.sutemos.kodai.Utils.KeyboardTools;
+import lt.sutemos.kodai.ViewModelProviders.KodaiViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private List<Irasas> irasai;
-    private CodeList kodai;
     private ImageButton searchButton;
     private EditText searchEditText;
     private ImageButton clearTextButton;
+    private KodaiViewModel kodaiViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
 
         searchButton = (ImageButton) findViewById(R.id.imageButtonSearch);
         clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
@@ -40,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        irasai = (List<Irasas>) new CodeList();
 
-        kodai = new CodeList();
-        adapter = new MyAdapter(this, kodai.get());
+//        kodai = new CodeList();
+        adapter = new MyAdapter(this, kodaiViewModel.get());
         recyclerView.setAdapter(adapter);
 
 
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     protected void search(){
-        irasai = kodai.find(searchEditText.getText().toString());
+        List<Irasas> irasai = kodaiViewModel.find(searchEditText.getText().toString());
         if (irasai != null) {
             adapter = new MyAdapter(getApplicationContext(), irasai);
             recyclerView.setAdapter(adapter);

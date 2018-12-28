@@ -32,7 +32,7 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="@string/searchHint"
-        android:inputType="textPostalAddress"
+        android:inputType="textFilter"
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
