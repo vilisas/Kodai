@@ -4,4 +4,7 @@
     <string name="adresas">Adresas</string>
     <string name="kodas">Kodas</string>
     <string name="new_entry">Naujas įrašas</string>
+    <string name="info_edit">Informacija</string>
+    <string name="apply">Išsaugoti</string>
+    <string name="additional_info">Papildoma informacija</string>
 </resources>
