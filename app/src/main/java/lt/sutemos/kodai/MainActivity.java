@@ -2,6 +2,8 @@ package lt.sutemos.kodai;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,21 +12,23 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import java.util.List;
+import android.widget.Toast;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
-import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Utils.KeyboardTools;
 import lt.sutemos.kodai.Models.KodaiViewModel;
+import lt.sutemos.kodai.Utils.Util;
 
 public class MainActivity extends AppCompatActivity {
+    public final int REQUEST_CODE = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private ImageButton searchButton;
     private EditText searchEditText;
+    private ImageButton searchButton;
     private ImageButton clearTextButton;
+    private ImageButton addButton;
     private KodaiViewModel kodaiViewModel;
+    private boolean exitNow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
         searchButton = (ImageButton) findViewById(R.id.imageButtonSearch);
         clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
-        searchEditText = (EditText) findViewById(R.id.editTextSearch);
+        addButton = (ImageButton) findViewById(R.id.imageButtonAdd);
 
+        searchEditText = (EditText) findViewById(R.id.editTextSearch);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewID);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        irasai = (List<Irasas>) new CodeList();
-
-//        kodai = new CodeList();
         adapter = new MyAdapter(this, kodaiViewModel);
         recyclerView.setAdapter(adapter);
-
 
         clearTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 search();
             }
         });
-
 
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -76,7 +76,34 @@ public class MainActivity extends AppCompatActivity {
             search();
             }
         });
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                 intent.putExtra("action", Util.ACTION_CODE.AC_NEW);
+                 startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exitNow) {
+            super.onBackPressed();
+            return;
+        }
+        exitNow = true;
+        Toast.makeText(getApplicationContext(), R.string.press_back_once_more_msg, Toast.LENGTH_SHORT).show();
+
+
+    }
+
     protected void search(){
 //        List<Irasas> irasai = kodaiViewModel.find(searchEditText.getText().toString());
 //        if (irasai != null) {
