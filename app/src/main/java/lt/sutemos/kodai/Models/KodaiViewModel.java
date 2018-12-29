@@ -1,7 +1,6 @@
 package lt.sutemos.kodai.Models;
 
 import android.arch.lifecycle.ViewModel;
-import android.support.annotation.StringRes;
 
 import java.util.List;
 

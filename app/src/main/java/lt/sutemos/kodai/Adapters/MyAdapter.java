@@ -48,6 +48,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return listItems.size();
     }
 
+    public void updateListItems(){
+        this.listItems = codeList.get();
+        // actually refresh visible list
+        notifyDataSetChanged();
+
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView adresas;
@@ -68,12 +75,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Toast.makeText(context, irasas.getAdresas() + " " + irasas.getKodas(),
                     Toast.LENGTH_LONG).show();
             codeList.delete(irasas.getId());
-            notifyDataSetChanged();
-//            listItems = kodaiViewModel.get();
-
-
-
-
+            updateListItems();
         }
     }
 }
