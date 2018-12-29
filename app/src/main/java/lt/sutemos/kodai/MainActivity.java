@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                  Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                 intent.putExtra("action", Util.ACTION_CODE.AC_NEW);
+                 intent.putExtra("action", Util.ACTION_NEW);
                  startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -90,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE){
+            switch (resultCode){
+                case RESULT_OK:
+                    Bundle bundle = data.getExtras();
+                    if (bundle != null){
+                        if (bundle.getInt("action") == Util.ACTION_NEW){
+                            kodaiViewModel.add(bundle.getString("address"),bundle.getString("code"));
+                            updateAdapter();
+                        }
+                    }
+
+
+                    break;
+
+
+                case RESULT_CANCELED:
+                    break;
+
+                default:
+            }
+        }
+
+
     }
 
     @Override
@@ -104,15 +128,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    protected void updateAdapter(){
+        adapter = new MyAdapter(getApplicationContext(), kodaiViewModel);
+        recyclerView.setAdapter(adapter);
+
+    }
     protected void search(){
-//        List<Irasas> irasai = kodaiViewModel.find(searchEditText.getText().toString());
-//        if (irasai != null) {
-
-
-            kodaiViewModel.setFilter(searchEditText.getText().toString());
-            adapter = new MyAdapter(getApplicationContext(), kodaiViewModel);
-            recyclerView.setAdapter(adapter);
-//        }
+        kodaiViewModel.setFilter(searchEditText.getText().toString());
+        updateAdapter();
         KeyboardTools.hide(this);
 
     }
