@@ -1,18 +1,26 @@
 package lt.sutemos.kodai;
 
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.io.File;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
 import lt.sutemos.kodai.Models.Irasas;
@@ -30,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton addButton;
     private KodaiViewModel kodaiViewModel;
     private boolean exitNow = false;
+    private File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
+        file = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+//            Util.loadEntriesFromCSV(file);
+            kodaiViewModel.setKodai(Util.loadEntriesFromCSV(file));
+
+        } else {
+            Log.i(getClass().toString(),"Can't read codes from external storage");
+        }
+
 
         searchButton = (ImageButton) findViewById(R.id.imageButtonSearch);
         clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
@@ -66,15 +84,10 @@ public class MainActivity extends AppCompatActivity {
 //                if ((event.getAction() == KeyEvent.ACTION_UP) && ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) ||
 //                                (keyCode >= KeyEvent.KEYCODE_BUTTON_A && keyCode <= KeyEvent.KEYCODE_BUTTON_Z) ||keyCode == KeyEvent.KEYCODE_DEL ))
 
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&  (keyCode == KeyEvent.KEYCODE_ENTER))
-
-                {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&  (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     search();
                     return true;
                 }
-
-
-
                 return false;
             }
         });
@@ -136,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 default:
             }
         }
-
-
     }
 
     @Override
@@ -148,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
         }
         exitNow = true;
         Toast.makeText(getApplicationContext(), R.string.press_back_once_more_msg, Toast.LENGTH_SHORT).show();
-
-
     }
 
     protected void updateAdapter(){

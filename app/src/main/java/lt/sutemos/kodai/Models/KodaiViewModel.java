@@ -43,7 +43,9 @@ public class KodaiViewModel extends ViewModel {
     public boolean update(Irasas irasas){
         return(kodai.update(irasas));
     }
-
+    public void setKodai(List<Irasas> kodai){
+        this.kodai.setIrasai(kodai);
+    }
 
 
 

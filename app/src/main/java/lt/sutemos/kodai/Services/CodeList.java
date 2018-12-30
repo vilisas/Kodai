@@ -14,8 +14,17 @@ public class CodeList {
         this.load();
     }
 
+
+    public void setIrasai(List<Irasas> irasai) {
+        this.irasai = irasai;
+    }
+
+    public List<Irasas> getIrasai() {
+        return irasai;
+    }
+
     /*
-     * generates dummy codes for now
+     * generates dummy codes for nowz
      */
     public void load(){
 
