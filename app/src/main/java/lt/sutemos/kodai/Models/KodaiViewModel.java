@@ -13,7 +13,7 @@ public class KodaiViewModel extends ViewModel {
 
     public KodaiViewModel(){
         kodai = new CodeList();
-        kodai.load();
+//        kodai.load();
     }
 
     public void load(){
@@ -33,19 +33,22 @@ public class KodaiViewModel extends ViewModel {
     }
 
 
-    public void add(String adresas, String kodas){
-        kodai.add(adresas,kodas);
+    public void add(String adresas, String kodas, String info){
+        kodai.add(adresas,kodas, info);
     }
     public boolean delete(int id){
         return kodai.delete(id);
     }
 
+    public boolean update(Irasas irasas){
+        return(kodai.update(irasas));
+    }
 
 
 
 
     // As with presenter, we implement standard lifecycle methods from the view
-    // in case we need to do anything with our model during those events.
+    // in case we need to do anything with our mode during those events.
     public void onCreate() { }
     public void onPause() { }
     public void onResume() { }

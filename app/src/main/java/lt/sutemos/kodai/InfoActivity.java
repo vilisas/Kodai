@@ -3,11 +3,12 @@ package lt.sutemos.kodai;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+
 
 import lt.sutemos.kodai.Utils.Util;
 
@@ -38,8 +39,7 @@ public class InfoActivity extends AppCompatActivity {
 
         if (extras != null) {
             currentAction =extras.getInt("action");
-            Toast.makeText(getApplicationContext(), "Action: " + currentAction,
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(), "Action: " + currentAction, Toast.LENGTH_LONG).show();
 
             switch (currentAction){
                 case Util.ACTION_NEW:
@@ -69,6 +69,8 @@ public class InfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = getIntent();
+//                Log.d("id", String.valueOf(returnIntent.getExtras().getInt("id")));
+//                Toast.makeText(getApplicationContext(), "id:" +returnIntent.getExtras().getInt("id"), Toast.LENGTH_SHORT).show();
                 returnIntent.putExtra("address", addressEditText.getText().toString());
                 returnIntent.putExtra("code", codeEditText.getText().toString());
                 returnIntent.putExtra("info", extraInfoEditText.getText().toString());

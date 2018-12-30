@@ -21,7 +21,7 @@ public class CodeList {
 
         irasai = new ArrayList<>();
         for (int i = 1; i<=25; i++){
-            this.add("Bijūno " + i, i + " kart paperst");
+            this.add("Bijūno " + i, i + " kart paperst", "");
         }
     }
 
@@ -52,8 +52,8 @@ public class CodeList {
 
     }
 
-    public void add(String adresas, String kodas){
-        irasai.add(new Irasas(id++, adresas,kodas));
+    public void add(String adresas, String kodas, String info){
+        irasai.add(new Irasas(id++, adresas,kodas, info));
     }
 
     private int getPositionById(int id){
@@ -77,6 +77,17 @@ public class CodeList {
 
     public int size(){
         return irasai.size();
+    }
+
+    public boolean update(Irasas irasas){
+        int position = getPositionById(irasas.getId());
+        if (position <0) {
+            return false;
+        } else{
+            irasai.set(position, irasas);
+        }
+
+        return true;
     }
 
 }

@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,7 +17,6 @@ import lt.sutemos.kodai.MainActivity;
 import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.R;
-import lt.sutemos.kodai.Services.CodeList;
 import lt.sutemos.kodai.Utils.Util;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -79,16 +76,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void onClick(View v) {
             int position = getAdapterPosition();
             Irasas irasas = listItems.get(position);
-//            codeList.delete(irasas.getId());
-
             Intent intent = new Intent(context, InfoActivity.class);
             intent.putExtra("action", Util.ACTION_EDIT);
             intent.putExtra("id", irasas.getId());
             intent.putExtra("address", irasas.getAdresas());
-//            intent.putExtra("info", irasas.getInfo());
+            intent.putExtra("info", irasas.getInfo());
             intent.putExtra("code", irasas.getKodas());
 
-            Log.d("MyAdapter::Instance", context.getClass().toString());
+//            Log.d("MyAdapter::Instance", context.getClass().toString());
             if (MainActivity.class.isInstance(context)) {
                 ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
             }

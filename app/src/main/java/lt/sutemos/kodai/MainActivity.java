@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
+import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Utils.KeyboardTools;
 import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.Utils.Util;
@@ -106,12 +107,23 @@ public class MainActivity extends AppCompatActivity {
                     if (bundle != null){
                         switch(bundle.getInt("action")) {
                             case Util.ACTION_NEW:
-                                kodaiViewModel.add(bundle.getString("address"),bundle.getString("code"));
+
+                                kodaiViewModel.add(bundle.getString("address"),
+                                        bundle.getString("code"), bundle.getString("info"));
                                 updateAdapter();
                                 break;
+
                             case Util.ACTION_EDIT:
-                                Toast.makeText(getApplicationContext(), "edited", Toast.LENGTH_SHORT).show();
-//                                updateAdapter();
+//                                Toast.makeText(getApplicationContext(), "edited", Toast.LENGTH_SHORT).show();
+                                int id = bundle.getInt("id");
+                                Irasas irasas = new Irasas(
+                                        id,
+                                        bundle.getString("address"),
+                                        bundle.getString("code"),
+                                        bundle.getString("info")
+                                );
+                                kodaiViewModel.update(irasas);
+                                updateAdapter();
                                 break;
                             default:
                         }
