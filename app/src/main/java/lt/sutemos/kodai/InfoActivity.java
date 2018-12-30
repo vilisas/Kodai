@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import lt.sutemos.kodai.Utils.Util;
 
@@ -37,6 +38,8 @@ public class InfoActivity extends AppCompatActivity {
 
         if (extras != null) {
             currentAction =extras.getInt("action");
+            Toast.makeText(getApplicationContext(), "Action: " + currentAction,
+                    Toast.LENGTH_LONG).show();
 
             switch (currentAction){
                 case Util.ACTION_NEW:

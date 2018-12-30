@@ -61,11 +61,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                // a-z, 0-9
+//                if ((event.getAction() == KeyEvent.ACTION_UP) && ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) ||
+//                                (keyCode >= KeyEvent.KEYCODE_BUTTON_A && keyCode <= KeyEvent.KEYCODE_BUTTON_Z) ||keyCode == KeyEvent.KEYCODE_DEL ))
+
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&  (keyCode == KeyEvent.KEYCODE_ENTER))
+
+                {
                     search();
                     return true;
                 }
+
+
+
                 return false;
             }
         });
@@ -96,15 +104,19 @@ public class MainActivity extends AppCompatActivity {
                 case RESULT_OK:
                     Bundle bundle = data.getExtras();
                     if (bundle != null){
-                        if (bundle.getInt("action") == Util.ACTION_NEW){
-                            kodaiViewModel.add(bundle.getString("address"),bundle.getString("code"));
-                            updateAdapter();
+                        switch(bundle.getInt("action")) {
+                            case Util.ACTION_NEW:
+                                kodaiViewModel.add(bundle.getString("address"),bundle.getString("code"));
+                                updateAdapter();
+                                break;
+                            case Util.ACTION_EDIT:
+                                Toast.makeText(getApplicationContext(), "edited", Toast.LENGTH_SHORT).show();
+//                                updateAdapter();
+                                break;
+                            default:
                         }
                     }
-
-
-                    break;
-
+                break;
 
                 case RESULT_CANCELED:
                     break;
@@ -129,8 +141,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void updateAdapter(){
-        adapter = new MyAdapter(getApplicationContext(), kodaiViewModel);
+        // atnaujina irasu saraso vaizda
+        adapter = new MyAdapter(this, kodaiViewModel);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     }
     protected void search(){
