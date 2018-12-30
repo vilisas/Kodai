@@ -18,9 +18,28 @@ import java.util.List;
 import lt.sutemos.kodai.Models.Irasas;
 
 public class Util {
-//    public enum ACTION_CODE {AC_NEW, AC_EDIT
     public static final int ACTION_NEW = 0;
     public static final int ACTION_EDIT = 1;
+    public static final int RESULT_DELETE =2;
+
+
+    /*
+     * generates dummy codes for nowz
+     */
+    public static List<Irasas> generateDummyData(){
+
+        List<Irasas> irasai = new ArrayList<>();
+        irasai.add(new Irasas("neradau kodai.txt",   "failo SD korteleje", "" +
+                "Irasyti kodai.txt faila i SD korteles saknini kataloga, kuriame CSV formatu turi buti irasyta:\n" +
+                "\"Adresas\", \"Kodas\", \"papildoma informacija\"\n" +
+                "taip pat programai reikia leidimo skaityti is SD korteles"));
+
+        for (int i = 1; i<=25; i++){
+            irasai.add(new Irasas("Bijūno " + i, i + " kart pabelst", ""));
+        }
+        irasai.add(new Irasas("Bijūno 26",   " 26 kart paperst", ""));
+        return irasai;
+    }
 
 
     public static List<Irasas> loadEntriesFromCSV(File file){

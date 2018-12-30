@@ -16,10 +16,6 @@ public class KodaiViewModel extends ViewModel {
 //        kodai.load();
     }
 
-    public void load(){
-        kodai.load();
-    }
-
     public List<Irasas> get(){
         return kodai.find(filter);
     }

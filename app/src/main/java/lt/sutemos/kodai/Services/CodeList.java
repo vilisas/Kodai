@@ -11,7 +11,6 @@ public class CodeList {
 
     public CodeList(){
         irasai = new ArrayList<>();
-        this.load();
     }
 
 
@@ -21,17 +20,6 @@ public class CodeList {
 
     public List<Irasas> getIrasai() {
         return irasai;
-    }
-
-    /*
-     * generates dummy codes for nowz
-     */
-    public void load(){
-
-        irasai = new ArrayList<>();
-        for (int i = 1; i<=25; i++){
-            this.add("Bijūno " + i, i + " kart paperst", "");
-        }
     }
 
     public List<Irasas> get(){

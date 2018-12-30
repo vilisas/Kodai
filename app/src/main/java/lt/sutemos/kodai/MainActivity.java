@@ -21,12 +21,15 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.List;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
 import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Utils.KeyboardTools;
 import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.Utils.Util;
+
+import static lt.sutemos.kodai.Utils.Util.RESULT_DELETE;
 
 public class MainActivity extends AppCompatActivity {
     public final int REQUEST_CODE = 1;
@@ -49,7 +52,13 @@ public class MainActivity extends AppCompatActivity {
         file = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
 //            Util.loadEntriesFromCSV(file);
-            kodaiViewModel.setKodai(Util.loadEntriesFromCSV(file));
+
+            List<Irasas> irasai = Util.loadEntriesFromCSV(file);
+            if (irasai!= null) {
+                kodaiViewModel.setKodai(irasai);
+            } else {
+                kodaiViewModel.setKodai(Util.generateDummyData());
+            }
 
         } else {
             Log.i(getClass().toString(),"Can't read codes from external storage");
@@ -112,11 +121,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Bundle bundle = null;
         if (requestCode == REQUEST_CODE){
+
+            if (data != null){
+                bundle = data.getExtras();
+            }
+
             switch (resultCode){
+
                 case RESULT_OK:
-                    Bundle bundle = data.getExtras();
                     if (bundle != null){
                         switch(bundle.getInt("action")) {
                             case Util.ACTION_NEW:
@@ -144,6 +158,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
                 case RESULT_CANCELED:
+                    break;
+                case RESULT_DELETE:
+                    if (bundle!=null){
+                        kodaiViewModel.delete(bundle.getInt("id"));
+                        updateAdapter();
+                    }
                     break;
 
                 default:

@@ -3,7 +3,6 @@ package lt.sutemos.kodai;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,9 +11,11 @@ import android.widget.ImageButton;
 
 import lt.sutemos.kodai.Utils.Util;
 
+import static lt.sutemos.kodai.Utils.Util.RESULT_DELETE;
+
 public class InfoActivity extends AppCompatActivity {
 
-    private ImageButton deleImageButton;
+    private ImageButton deleteImageButton;
     private Button cancelButton;
     private Button saveButton;
     private EditText addressEditText;
@@ -30,7 +31,7 @@ public class InfoActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        deleImageButton = (ImageButton) findViewById(R.id.aiDeleteButtonID);
+        deleteImageButton = (ImageButton) findViewById(R.id.aiDeleteButtonID);
         cancelButton = (Button) findViewById(R.id.aiCancelButtonID);
         saveButton = (Button) findViewById(R.id.aiSaveButtonID);
         addressEditText = (EditText) findViewById(R.id.aiAddressID);
@@ -43,8 +44,8 @@ public class InfoActivity extends AppCompatActivity {
 
             switch (currentAction){
                 case Util.ACTION_NEW:
-                    deleImageButton.setEnabled(false);
-                    deleImageButton.setVisibility(View.GONE);
+                    deleteImageButton.setEnabled(false);
+                    deleteImageButton.setVisibility(View.GONE);
                     break;
 
                 case Util.ACTION_EDIT:
@@ -56,6 +57,16 @@ public class InfoActivity extends AppCompatActivity {
                     default:
             }
         }
+
+        deleteImageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setResult(RESULT_DELETE, getIntent());
+                finish();
+
+                return false;
+            }
+        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
