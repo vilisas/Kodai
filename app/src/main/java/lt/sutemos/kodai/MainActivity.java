@@ -3,7 +3,6 @@ package lt.sutemos.kodai;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -13,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +26,6 @@ import java.util.List;
 
 import lt.sutemos.kodai.Adapters.MyAdapter;
 import lt.sutemos.kodai.Models.Irasas;
-import lt.sutemos.kodai.Utils.KeyboardTools;
 import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.Utils.Util;
 
@@ -36,12 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private EditText searchEditText;
-    private ImageButton searchButton;
     private ImageButton clearTextButton;
     private ImageButton addButton;
     private KodaiViewModel kodaiViewModel;
     private boolean exitNow = false;
-    private File file;
+    private File csvImportFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
-        file = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-//            Util.loadEntriesFromCSV(file);
+        csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
 
-            List<Irasas> irasai = Util.loadEntriesFromCSV(file);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+//            Util.loadEntriesFromCSV(csvImportFile);
+
+            List<Irasas> irasai = Util.loadEntriesFromCSV(csvImportFile);
             if (irasai!= null) {
                 kodaiViewModel.setKodai(irasai);
             } else {
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        searchButton = (ImageButton) findViewById(R.id.imageButtonSearch);
         clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
         addButton = (ImageButton) findViewById(R.id.imageButtonAdd);
 
@@ -85,14 +84,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                search();
+            }
+        });
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                // a-z, 0-9
-//                if ((event.getAction() == KeyEvent.ACTION_UP) && ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) ||
-//                                (keyCode >= KeyEvent.KEYCODE_BUTTON_A && keyCode <= KeyEvent.KEYCODE_BUTTON_Z) ||keyCode == KeyEvent.KEYCODE_DEL ))
-
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&  (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     search();
                     return true;
@@ -101,12 +112,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            search();
-            }
-        });
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
     protected void search(){
         kodaiViewModel.setFilter(searchEditText.getText().toString());
         updateAdapter();
-        KeyboardTools.hide(this);
-
+//        KeyboardTools.hide(this);
     }
 }

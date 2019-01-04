@@ -37,17 +37,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButtonSearch"
-        android:layout_width="59dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:contentDescription="@android:string/search_go"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_search_category_default" />
-
-    <ImageButton
         android:id="@+id/imageButtonAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +52,9 @@
         android:id="@+id/imageButtonClearText"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonSearch"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 </android.support.constraint.ConstraintLayout>
