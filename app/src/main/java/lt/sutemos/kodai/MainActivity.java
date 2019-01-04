@@ -16,6 +16,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private EditText searchEditText;
     private ImageButton clearTextButton;
-    private ImageButton addButton;
     private KodaiViewModel kodaiViewModel;
     private boolean exitNow = false;
     private File csvImportFile;
+    private MenuInflater menuInflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
-        addButton = (ImageButton) findViewById(R.id.imageButtonAdd);
-
         searchEditText = (EditText) findViewById(R.id.editTextSearch);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewID);
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 search();
             }
         });
+
+
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -112,15 +115,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                 intent.putExtra("action", Util.ACTION_NEW);
-                 startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater findMenuItems = getMenuInflater();
+        findMenuItems.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_add:
+                createNewEntry();
+                break;
+            case R.id.menu_import:
+                break;
+            case R.id.menu_export:
+                break;
+            case R.id.menu_clear:
+                break;
+            case R.id.menu_settings:
+                break;
+            case R.id.menu_about:
+                break;
+            case R.id.menu_exit:
+                closeApp();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -186,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), R.string.press_back_once_more_msg, Toast.LENGTH_SHORT).show();
     }
 
+    protected void closeApp(){
+        finish();
+
+    }
     protected void updateAdapter(){
         // atnaujina irasu saraso vaizda
         adapter = new MyAdapter(this, kodaiViewModel);
@@ -197,5 +226,11 @@ public class MainActivity extends AppCompatActivity {
         kodaiViewModel.setFilter(searchEditText.getText().toString());
         updateAdapter();
 //        KeyboardTools.hide(this);
+    }
+
+    protected void createNewEntry(){
+            Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+            intent.putExtra("action", Util.ACTION_NEW);
+            startActivityForResult(intent, REQUEST_CODE);
     }
 }
