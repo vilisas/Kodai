@@ -1,10 +1,7 @@
 package lt.sutemos.kodai.Utils;
 
 
-import android.app.Application;
-import android.os.Environment;
-import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
+import android.app.Activity;
 import android.util.Log;
 
 import com.opencsv.CSVReader;
@@ -18,9 +15,15 @@ import java.util.List;
 import lt.sutemos.kodai.Models.Irasas;
 
 public class Util {
-    public static final int ACTION_NEW = 0;
-    public static final int ACTION_EDIT = 1;
-    public static final int RESULT_DELETE =2;
+    public static final int ACTION_NEW              = 0;
+    public static final int ACTION_EDIT             = 1;
+
+
+    public static final int REQUEST_CREATE_ENTRY    =100;
+    public static final int REQUEST_EDIT_ENTRY      =101;
+    public static final int REQUEST_IMPORT_CSV_FILE =102;
+    public static final int REQUEST_EXPORT_CSV_FILE =103;
+
 
 
     /*

@@ -21,7 +21,6 @@ import lt.sutemos.kodai.Utils.Util;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    public final int REQUEST_CODE=1;
     private Context context;
     private List<Irasas> listItems;
     private KodaiViewModel codeList;
@@ -85,7 +84,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
 //            Log.d("MyAdapter::Instance", context.getClass().toString());
             if (MainActivity.class.isInstance(context)) {
-                ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
+                ((Activity) context).startActivityForResult(intent, Util.REQUEST_EDIT_ENTRY);
             }
             updateListItems();
         }

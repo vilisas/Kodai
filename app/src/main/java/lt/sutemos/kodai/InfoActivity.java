@@ -11,8 +11,6 @@ import android.widget.ImageButton;
 
 import lt.sutemos.kodai.Utils.Util;
 
-import static lt.sutemos.kodai.Utils.Util.RESULT_DELETE;
-
 public class InfoActivity extends AppCompatActivity {
 
     private ImageButton deleteImageButton;
@@ -40,6 +38,7 @@ public class InfoActivity extends AppCompatActivity {
 
         if (extras != null) {
             currentAction =extras.getInt("action");
+//            currentAction=getIntent().
 //            Toast.makeText(getApplicationContext(), "Action: " + currentAction, Toast.LENGTH_LONG).show();
 
             switch (currentAction){
@@ -61,7 +60,7 @@ public class InfoActivity extends AppCompatActivity {
         deleteImageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                setResult(RESULT_DELETE, getIntent());
+                setResult(RESULT_FIRST_USER, getIntent());
                 finish();
 
                 return false;

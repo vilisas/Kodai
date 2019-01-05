@@ -5,6 +5,7 @@ import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -32,10 +33,11 @@ import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.Utils.Util;
 
-import static lt.sutemos.kodai.Utils.Util.RESULT_DELETE;
+//import static lt.sutemos.kodai.Utils.Util.REQUEST_IMPORT_CSV_FILE;
+import static lt.sutemos.kodai.Utils.Util.*;
 
 public class MainActivity extends AppCompatActivity {
-    public final int REQUEST_CODE = 1;
+//    public final int REQUEST_CODE = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private EditText searchEditText;
@@ -131,9 +133,22 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_add:
                 createNewEntry();
                 break;
-            case R.id.menu_import:
+            case R.id.menu_import: {
+//                import file dialog
+                Intent intent = new Intent()
+                        .setType("text/*")
+                        .setAction(Intent.ACTION_GET_CONTENT)
+                        .addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, REQUEST_IMPORT_CSV_FILE);
+            }
                 break;
-            case R.id.menu_export:
+            case R.id.menu_export: {
+                Intent intent = new Intent()
+                        .setType("*/*")
+                        .setAction(Intent.ACTION_CREATE_DOCUMENT)
+                        .addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, REQUEST_EXPORT_CSV_FILE);
+            }
                 break;
             case R.id.menu_clear:
                 break;
@@ -152,52 +167,63 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = null;
-        if (requestCode == REQUEST_CODE){
 
-            if (data != null){
-                bundle = data.getExtras();
+        Log.d("result","requestCode=" + requestCode + ", resultCode="+ resultCode);
+
+        if (data != null){
+            bundle = data.getExtras();
+        }
+
+        if ((requestCode == REQUEST_CREATE_ENTRY || requestCode == REQUEST_EDIT_ENTRY) && bundle == null){
+            return;
+        }
+
+        switch (requestCode){
+            case REQUEST_CREATE_ENTRY:{
+                switch (resultCode){
+//                  add entry
+                    case RESULT_OK:
+                        addNewEntry(bundle);
+                        break;
+                        default:
+                }
             }
+            break;
 
-            switch (resultCode){
-
-                case RESULT_OK:
-                    if (bundle != null){
-                        switch(bundle.getInt("action")) {
-                            case Util.ACTION_NEW:
-
-                                kodaiViewModel.add(bundle.getString("address"),
-                                        bundle.getString("code"), bundle.getString("info"));
-                                updateAdapter();
-                                break;
-
-                            case Util.ACTION_EDIT:
-//                                Toast.makeText(getApplicationContext(), "edited", Toast.LENGTH_SHORT).show();
-                                int id = bundle.getInt("id");
-                                Irasas irasas = new Irasas(
-                                        id,
-                                        bundle.getString("address"),
-                                        bundle.getString("code"),
-                                        bundle.getString("info")
-                                );
-                                kodaiViewModel.update(irasas);
-                                updateAdapter();
-                                break;
-                            default:
-                        }
-                    }
-                break;
-
-                case RESULT_CANCELED:
-                    break;
-                case RESULT_DELETE:
-                    if (bundle!=null){
+            case REQUEST_EDIT_ENTRY:{
+                switch (resultCode){
+//                  update entry
+                    case RESULT_OK:
+                        updateEntry(bundle);
+                        break;
+//                  delete entry
+                    case RESULT_FIRST_USER:
                         kodaiViewModel.delete(bundle.getInt("id"));
                         updateAdapter();
-                    }
-                    break;
+                        break;
+                    default:
+                }
 
-                default:
             }
+            break;
+
+            case REQUEST_IMPORT_CSV_FILE:
+                if (data != null) {
+                    Uri uri = data.getData();
+                    importCsvFile(uri);
+                } else{
+                    Log.d("data"," data == null");
+                }
+
+                break;
+            case REQUEST_EXPORT_CSV_FILE:
+                if (data != null) {
+                    Uri uri = data.getData();
+                    exportCsvFile(uri);
+                }
+                break;
+
+            default:
         }
     }
 
@@ -231,6 +257,35 @@ public class MainActivity extends AppCompatActivity {
     protected void createNewEntry(){
             Intent intent = new Intent(MainActivity.this, InfoActivity.class);
             intent.putExtra("action", Util.ACTION_NEW);
-            startActivityForResult(intent, REQUEST_CODE);
+            startActivityForResult(intent, Util.REQUEST_CREATE_ENTRY);
+    }
+
+    protected void addNewEntry(Bundle bundle){
+        kodaiViewModel.add(
+                bundle.getString("address"),
+                bundle.getString("code"),
+                bundle.getString("info")
+        );
+        updateAdapter();
+    }
+
+    protected void updateEntry(Bundle bundle){
+        Irasas irasas = new Irasas(
+                bundle.getInt("id"),
+                bundle.getString("address"),
+                bundle.getString("code"),
+                bundle.getString("info")
+        );
+        kodaiViewModel.update(irasas);
+        updateAdapter();
+    }
+
+    protected void importCsvFile(Uri uri){
+        Log.d("Import/URI", uri.getPath());
+
+    }
+    protected void exportCsvFile(Uri uri){
+        Log.d("Export/URI", uri.getPath());
+
     }
 }
