@@ -1,14 +1,18 @@
 package lt.sutemos.kodai.Utils;
 
 
-import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.opencsv.CSVReader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +47,6 @@ public class Util {
         irasai.add(new Irasas("Bijūno 26",   " 26 kart paperst", ""));
         return irasai;
     }
-
 
     public static List<Irasas> loadEntriesFromCSV(File file){
         List<Irasas> returnList = new ArrayList<>();
@@ -81,4 +84,62 @@ public class Util {
 
         return null;
     }
+
+    public static List<Irasas> loadEntriesFromURI(Context context, Uri uri){
+
+        Log.v("Util","started");
+        if (context == null || uri == null){
+            return null;
+        }
+        Log.v("Util","not null");
+
+        int id = 0;
+        List<Irasas> returnList = new ArrayList<>();
+        InputStream inputStream;
+
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri);
+            Log.v("Util","got inputStream");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.e("Not Found","File not found");
+            return null;
+        }
+
+        Log.v("Util","inputStream is not null");
+
+
+        try {
+            CSVReader reader = new CSVReader(new InputStreamReader(inputStream));
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                String address;
+                String code;
+                String comment = null;
+                Irasas irasas;
+
+                if (nextLine.length >2){
+                    comment = nextLine[2];
+                }
+                if (nextLine.length >=2){
+                    address = nextLine[0];
+                    code= nextLine[1];
+                    irasas = new Irasas(id++, address, code, comment);
+                    returnList.add(irasas);
+                }
+            }
+            reader.close();
+            return returnList;
+
+        } catch (IOException e) {
+            Log.d("loadEntriesFromCSV:", "IO Exception "+ e.getCause());
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+
 }

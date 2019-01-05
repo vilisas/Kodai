@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-//            Util.loadEntriesFromCSV(csvImportFile);
 
             List<Irasas> irasai = Util.loadEntriesFromCSV(csvImportFile);
             if (irasai!= null) {
@@ -144,13 +143,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_export: {
                 Intent intent = new Intent()
-                        .setType("*/*")
+                        .setType("text/*")
                         .setAction(Intent.ACTION_CREATE_DOCUMENT)
                         .addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(intent, REQUEST_EXPORT_CSV_FILE);
             }
                 break;
             case R.id.menu_clear:
+                kodaiViewModel.clear();
+                updateAdapter();
                 break;
             case R.id.menu_settings:
                 break;
@@ -283,6 +284,14 @@ public class MainActivity extends AppCompatActivity {
     protected void importCsvFile(Uri uri){
         Log.d("Import/URI", uri.getPath());
 
+        List<Irasas> irasai = Util.loadEntriesFromURI(getApplicationContext(), uri);
+            if (irasai!= null) {
+                Log.v("importCsvFile()", "got " + irasai.size() + " entries");
+                kodaiViewModel.setKodai(irasai);
+                updateAdapter();
+            } else{
+                Log.d("Import/result", "result is null");
+            }
     }
     protected void exportCsvFile(Uri uri){
         Log.d("Export/URI", uri.getPath());

@@ -53,4 +53,7 @@ public class KodaiViewModel extends ViewModel {
     public void onDestroy() { }
 
 
+    public void clear() {
+        kodai = new CodeList();
+    }
 }
