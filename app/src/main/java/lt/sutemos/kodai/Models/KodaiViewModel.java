@@ -1,16 +1,18 @@
 package lt.sutemos.kodai.Models;
 
 import android.arch.lifecycle.ViewModel;
+import android.arch.persistence.room.Room;
 
 import java.util.List;
 
 import lt.sutemos.kodai.Services.CodeList;
+import lt.sutemos.kodai.database.AppDatabase;
 
 public class KodaiViewModel extends ViewModel {
 
     private CodeList kodai;
     private String filter;
-
+    private AppDatabase db;
     public KodaiViewModel(){
         kodai = new CodeList();
 //        kodai.load();
@@ -52,6 +54,13 @@ public class KodaiViewModel extends ViewModel {
     }
 
 
+    public AppDatabase getDb() {
+        return db;
+    }
+
+    public void setDb(AppDatabase db) {
+        this.db = db;
+    }
 
     // As with presenter, we implement standard lifecycle methods from the view
     // in case we need to do anything with our mode during those events.

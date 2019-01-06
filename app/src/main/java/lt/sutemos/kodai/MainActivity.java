@@ -3,6 +3,7 @@ package lt.sutemos.kodai;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import lt.sutemos.kodai.Adapters.MyAdapter;
 import lt.sutemos.kodai.Models.Irasas;
 import lt.sutemos.kodai.Models.KodaiViewModel;
 import lt.sutemos.kodai.Utils.Util;
+import lt.sutemos.kodai.database.AppDatabase;
 
 //import static lt.sutemos.kodai.Utils.Util.REQUEST_IMPORT_CSV_FILE;
 import static lt.sutemos.kodai.Utils.Util.*;
@@ -55,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
+
+        kodaiViewModel.setDb( Room.inMemoryDatabaseBuilder(getApplicationContext(),
+                AppDatabase.class).build());
+
+//        kodaiViewModel.setDb( Room.databaseBuilder(getApplicationContext(),
+//                AppDatabase.class, "kodai").build());
+
         csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
