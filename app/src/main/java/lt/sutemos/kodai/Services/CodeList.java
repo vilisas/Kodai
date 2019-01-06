@@ -22,10 +22,6 @@ public class CodeList {
         return irasai;
     }
 
-    public List<Irasas> get(){
-        return irasai;
-    }
-
     public List<Irasas> find(String keyword){
         List<Irasas> returnList = new ArrayList<>();
 
@@ -52,6 +48,12 @@ public class CodeList {
     public void add(String adresas, String kodas, String info){
         irasai.add(new Irasas(id++, adresas,kodas, info));
     }
+
+    public void add(Irasas irasas){
+        this.add(irasas.getAdresas(),irasas.getKodas(),irasas.getInfo());
+    }
+
+
 
     private int getPositionById(int id){
         for (int i = 0; i < irasai.size(); i++){
@@ -85,6 +87,28 @@ public class CodeList {
         }
 
         return true;
+    }
+
+    /**
+     * merges list, if values "adresas" are equal, then overwrite them, else append
+     * @param sarasas
+     */
+    public void merge(List<Irasas> sarasas){
+        if (sarasas == null){
+            return;
+        }
+        for (Irasas i :
+                sarasas) {
+            int position = irasai.indexOf(i);
+            if (position >=0){
+                int originalId = irasai.get(position).getId();
+                i.setId(originalId);
+                irasai.set(position,i);
+            } else {
+                irasai.add(i);
+            }
+        }
+
     }
 
 }

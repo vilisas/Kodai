@@ -58,8 +58,8 @@ public class Util {
             String[] nextLine;
             List l;
             while ((nextLine = reader.readNext()) != null) {
-                String address = "";
-                String code = "";
+                String address;
+                String code;
                 String comment = "";
 
                 Irasas irasas;
@@ -130,6 +130,7 @@ public class Util {
                 }
             }
             reader.close();
+            inputStream.close();
             return returnList;
 
         } catch (IOException e) {

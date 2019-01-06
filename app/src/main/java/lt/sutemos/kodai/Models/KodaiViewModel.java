@@ -16,6 +16,11 @@ public class KodaiViewModel extends ViewModel {
 //        kodai.load();
     }
 
+    public CodeList getKodai() {
+        return kodai;
+    }
+
+
     public List<Irasas> get(){
         return kodai.find(filter);
     }
@@ -41,6 +46,9 @@ public class KodaiViewModel extends ViewModel {
     }
     public void setKodai(List<Irasas> kodai){
         this.kodai.setIrasai(kodai);
+    }
+    public void addKodai(List<Irasas> irasai){
+        this.kodai.getIrasai().addAll(irasai);
     }
 
 

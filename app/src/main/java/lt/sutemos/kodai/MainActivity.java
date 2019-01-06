@@ -6,8 +6,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -238,30 +241,30 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), R.string.press_back_once_more_msg, Toast.LENGTH_SHORT).show();
     }
 
-    protected void closeApp(){
+    private void closeApp(){
         finish();
 
     }
-    protected void updateAdapter(){
+    private void updateAdapter(){
         // atnaujina irasu saraso vaizda
         adapter = new MyAdapter(this, kodaiViewModel);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
-    protected void search(){
+    private void search(){
         kodaiViewModel.setFilter(searchEditText.getText().toString());
         updateAdapter();
 //        KeyboardTools.hide(this);
     }
 
-    protected void createNewEntry(){
+    private void createNewEntry(){
             Intent intent = new Intent(MainActivity.this, InfoActivity.class);
             intent.putExtra("action", Util.ACTION_NEW);
             startActivityForResult(intent, Util.REQUEST_CREATE_ENTRY);
     }
 
-    protected void addNewEntry(Bundle bundle){
+    private void addNewEntry(Bundle bundle){
         kodaiViewModel.add(
                 bundle.getString("address"),
                 bundle.getString("code"),
@@ -270,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         updateAdapter();
     }
 
-    protected void updateEntry(Bundle bundle){
+    private void updateEntry(Bundle bundle){
         Irasas irasas = new Irasas(
                 bundle.getInt("id"),
                 bundle.getString("address"),
@@ -281,19 +284,20 @@ public class MainActivity extends AppCompatActivity {
         updateAdapter();
     }
 
-    protected void importCsvFile(Uri uri){
+    private void importCsvFile(Uri uri){
         Log.d("Import/URI", uri.getPath());
 
         List<Irasas> irasai = Util.loadEntriesFromURI(getApplicationContext(), uri);
             if (irasai!= null) {
                 Log.v("importCsvFile()", "got " + irasai.size() + " entries");
-                kodaiViewModel.setKodai(irasai);
+//                kodaiViewModel.addKodai(irasai);
+                kodaiViewModel.getKodai().merge(irasai);
                 updateAdapter();
             } else{
                 Log.d("Import/result", "result is null");
             }
     }
-    protected void exportCsvFile(Uri uri){
+    private void exportCsvFile(Uri uri){
         Log.d("Export/URI", uri.getPath());
 
     }

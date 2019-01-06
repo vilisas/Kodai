@@ -1,7 +1,7 @@
 package lt.sutemos.kodai.Models;
 
 public class Irasas {
-    int id;
+    private int id;
     private String adresas;
     private String kodas;
     private String info;
@@ -50,5 +50,18 @@ public class Irasas {
 
     public void setKodas(String kodas) {
         this.kodas = kodas;
+    }
+
+    @Override
+    public int hashCode() {
+        return(adresas.hashCode());
+//        return(adresas.hashCode()+kodas.hashCode()+info.hashCode());
+//        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (this.hashCode() == obj.hashCode());
+//        return super.equals(obj);
     }
 }
