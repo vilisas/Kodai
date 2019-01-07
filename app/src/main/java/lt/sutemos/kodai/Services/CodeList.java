@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lt.sutemos.kodai.Models.Irasas;
+import lt.sutemos.kodai.Models.KodaiViewModel;
 
 public class CodeList {
     private List<Irasas> irasai;
@@ -45,15 +46,33 @@ public class CodeList {
 
     }
 
+    /**
+     * Add address, code and info. Automatically generate ID
+     * @param adresas
+     * @param kodas
+     * @param info
+     */
     public void add(String adresas, String kodas, String info){
         irasai.add(new Irasas(id++, adresas,kodas, info));
     }
 
+    /**
+     * add entry and generate ID
+     * @param irasas
+     */
     public void add(Irasas irasas){
         this.add(irasas.getAdresas(),irasas.getKodas(),irasas.getInfo());
     }
 
-
+    /**
+     * adds list and automatically generates ID
+     * @param sarasas
+     */
+    public void add(List<Irasas> sarasas) {
+        for (Irasas rasas : sarasas) {
+            this.add(rasas);
+        }
+    }
 
     private int getPositionById(int id){
         for (int i = 0; i < irasai.size(); i++){

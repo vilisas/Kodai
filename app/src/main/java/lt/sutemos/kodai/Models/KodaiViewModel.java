@@ -50,7 +50,8 @@ public class KodaiViewModel extends ViewModel {
         this.kodai.setIrasai(kodai);
     }
     public void addKodai(List<Irasas> irasai){
-        this.kodai.getIrasai().addAll(irasai);
+//        this.kodai.getIrasai().addAll(irasai);
+        kodai.add(irasai);
     }
 
 

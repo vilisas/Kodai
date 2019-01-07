@@ -65,18 +65,18 @@ public class MainActivity extends AppCompatActivity {
 //                AppDatabase.class, "kodai").build());
 
         csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
-
+        List<Irasas> irasai = null;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-
-            List<Irasas> irasai = Util.loadEntriesFromCSV(csvImportFile);
-            if (irasai!= null) {
-                kodaiViewModel.setKodai(irasai);
-            } else {
-                kodaiViewModel.setKodai(Util.generateDummyData());
-            }
-
+            irasai = Util.loadEntriesFromCSV(csvImportFile);
         } else {
             Log.i(getClass().toString(),"Can't read codes from external storage");
+        }
+
+        if (irasai!= null && irasai.size() >0) {
+            kodaiViewModel.setKodai(irasai);
+        } else {
+//            kodaiViewModel.setKodai(Util.generateDummyData());
+            kodaiViewModel.addKodai(Util.generateDummyData());
         }
 
 
