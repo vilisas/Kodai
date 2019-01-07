@@ -1,4 +1,4 @@
-package lt.sutemos.kodai.Adapters;
+package lt.sutemos.kodai.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,15 +14,15 @@ import java.util.List;
 
 import lt.sutemos.kodai.InfoActivity;
 import lt.sutemos.kodai.MainActivity;
-import lt.sutemos.kodai.Models.Irasas;
-import lt.sutemos.kodai.Models.KodaiViewModel;
+import lt.sutemos.kodai.database.Code;
+import lt.sutemos.kodai.models.KodaiViewModel;
 import lt.sutemos.kodai.R;
-import lt.sutemos.kodai.Utils.Util;
+import lt.sutemos.kodai.utils.Util;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private Context context;
-    private List<Irasas> listItems;
+    private List<Code> listItems;
     private KodaiViewModel codeList;
 
     public MyAdapter(Context context, KodaiViewModel kodaiViewModel) {
@@ -30,7 +30,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         this.codeList = kodaiViewModel;
         this.listItems = kodaiViewModel.get();
     }
-
 
     @NonNull
     @Override
@@ -42,8 +41,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyAdapter.ViewHolder viewHolder, int i) {
 
-        viewHolder.adresas.setText(listItems.get(i).getAdresas());
-        viewHolder.kodas.setText(listItems.get(i).getKodas());
+        viewHolder.adresas.setText(listItems.get(i).getAddress());
+        viewHolder.kodas.setText(listItems.get(i).getCode());
     }
 
     @Override
@@ -55,7 +54,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         this.listItems = codeList.get();
         // actually refresh visible list
         notifyDataSetChanged();
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -74,15 +72,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Irasas irasas = listItems.get(position);
+            Code irasas = listItems.get(position);
             Intent intent = new Intent(context, InfoActivity.class);
             intent.putExtra("action", Util.ACTION_EDIT);
-            intent.putExtra("id", irasas.getId());
-            intent.putExtra("address", irasas.getAdresas());
-            intent.putExtra("info", irasas.getInfo());
-            intent.putExtra("code", irasas.getKodas());
-
-//            Log.d("MyAdapter::Instance", context.getClass().toString());
+            intent.putExtra("Code", irasas);
             if (MainActivity.class.isInstance(context)) {
                 ((Activity) context).startActivityForResult(intent, Util.REQUEST_EDIT_ENTRY);
             }

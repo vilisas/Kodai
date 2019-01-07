@@ -1,4 +1,4 @@
-package lt.sutemos.kodai.Utils;
+package lt.sutemos.kodai.utils;
 
 
 import android.content.Context;
@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import lt.sutemos.kodai.Models.Irasas;
+import lt.sutemos.kodai.database.Code;
 
 public class Util {
     public static final int ACTION_NEW              = 0;
@@ -33,23 +33,23 @@ public class Util {
     /*
      * generates dummy codes for nowz
      */
-    public static List<Irasas> generateDummyData(){
+    public static List<Code> generateDummyData(){
 
-        List<Irasas> irasai = new ArrayList<>();
-        irasai.add(new Irasas("neradau kodai.txt",   "failo SD korteleje", "" +
+        List<Code> irasai = new ArrayList<>();
+        irasai.add(new Code("neradau kodai.txt",   "failo SD korteleje", "" +
                 "Irasyti kodai.txt faila i SD korteles saknini kataloga, kuriame CSV formatu turi buti irasyta:\n" +
                 "\"Adresas\", \"Kodas\", \"papildoma informacija\"\n" +
                 "taip pat programai reikia leidimo skaityti is SD korteles"));
 
         for (int i = 1; i<=25; i++){
-            irasai.add(new Irasas("Bijūno " + i, i + " kart pabelst", ""));
+            irasai.add(new Code("Bijūno " + i, i + " kart pabelst", ""));
         }
-        irasai.add(new Irasas("Bijūno 26",   " 26 kart paperst", ""));
+        irasai.add(new Code("Bijūno 26",   " 26 kart paperst", ""));
         return irasai;
     }
 
-    public static List<Irasas> loadEntriesFromCSV(File file){
-        List<Irasas> returnList = new ArrayList<>();
+    public static List<Code> loadEntriesFromCSV(File file){
+        List<Code> returnList = new ArrayList<>();
 
         Log.d("CSV file:", file.toString());
         int id = 0;
@@ -62,14 +62,14 @@ public class Util {
                 String code;
                 String comment = "";
 
-                Irasas irasas;
+                Code irasas;
                 if (nextLine.length >2){
                     comment = nextLine[2];
                 }
                 if (nextLine.length >=2){
                     address = nextLine[0];
                     code= nextLine[1];
-                    irasas = new Irasas(id++, address, code, comment);
+                    irasas = new Code(address, code, comment);
                     returnList.add(irasas);
                 }
             }
@@ -85,7 +85,7 @@ public class Util {
         return null;
     }
 
-    public static List<Irasas> loadEntriesFromURI(Context context, Uri uri){
+    public static List<Code> loadEntriesFromURI(Context context, Uri uri){
 
         Log.v("Util","started");
         if (context == null || uri == null){
@@ -94,7 +94,7 @@ public class Util {
         Log.v("Util","not null");
 
         int id = 0;
-        List<Irasas> returnList = new ArrayList<>();
+        List<Code> returnList = new ArrayList<>();
         InputStream inputStream;
 
         try {
@@ -117,7 +117,7 @@ public class Util {
                 String address;
                 String code;
                 String comment = null;
-                Irasas irasas;
+                Code irasas;
 
                 if (nextLine.length >2){
                     comment = nextLine[2];
@@ -125,7 +125,7 @@ public class Util {
                 if (nextLine.length >=2){
                     address = nextLine[0];
                     code= nextLine[1];
-                    irasas = new Irasas(id++, address, code, comment);
+                    irasas = new Code(address, code, comment);
                     returnList.add(irasas);
                 }
             }

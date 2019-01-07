@@ -3,15 +3,18 @@ package lt.sutemos.kodai;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 
-import lt.sutemos.kodai.Utils.Util;
+import lt.sutemos.kodai.database.Code;
+import lt.sutemos.kodai.utils.Util;
 
 public class InfoActivity extends AppCompatActivity {
+    private final String TAG=AppCompatActivity.class.toString();
 
     private ImageButton deleteImageButton;
     private Button cancelButton;
@@ -19,6 +22,7 @@ public class InfoActivity extends AppCompatActivity {
     private EditText addressEditText;
     private EditText codeEditText;
     private EditText extraInfoEditText;
+    private Code code;
     private int currentAction;
 
 
@@ -35,22 +39,27 @@ public class InfoActivity extends AppCompatActivity {
         addressEditText = (EditText) findViewById(R.id.aiAddressID);
         codeEditText = (EditText) findViewById(R.id.aiCodeID);
         extraInfoEditText = (EditText) findViewById(R.id.aiExtraInfoID);
+        Log.d(TAG, "onCreate: infoActivity");
 
         if (extras != null) {
             currentAction =extras.getInt("action");
-//            currentAction=getIntent().
-//            Toast.makeText(getApplicationContext(), "Action: " + currentAction, Toast.LENGTH_LONG).show();
 
             switch (currentAction){
                 case Util.ACTION_NEW:
                     deleteImageButton.setEnabled(false);
                     deleteImageButton.setVisibility(View.GONE);
+                    code = new Code();
                     break;
 
                 case Util.ACTION_EDIT:
-                    addressEditText.setText(extras.getString("address"));
-                    codeEditText.setText(extras.getString("code"));
-                    extraInfoEditText.setText(extras.getString("info"));
+                    code = (Code) extras.getSerializable("Code");
+                    Log.d(TAG, "onCreate: id="+code.getId());
+                    Log.d(TAG, "onCreate: address="+code.getAddress());
+                    Log.d(TAG, "onCreate: code="+code.getCode());
+                    Log.d(TAG, "onCreate: info="+code.getInfo());
+                    addressEditText.setText(code.getAddress());
+                    codeEditText.setText(code.getCode());
+                    extraInfoEditText.setText(code.getInfo());
                     break;
 
                     default:
@@ -79,13 +88,15 @@ public class InfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = getIntent();
-//                Log.d("id", String.valueOf(returnIntent.getExtras().getInt("id")));
-//                Toast.makeText(getApplicationContext(), "id:" +returnIntent.getExtras().getInt("id"), Toast.LENGTH_SHORT).show();
-                returnIntent.putExtra("address", addressEditText.getText().toString());
-                returnIntent.putExtra("code", codeEditText.getText().toString());
-                returnIntent.putExtra("info", extraInfoEditText.getText().toString());
+                Log.d(TAG, "onClick: saveButton");
+                code.setAddress(addressEditText.getText().toString());
+                code.setCode(codeEditText.getText().toString());
+                code.setInfo(extraInfoEditText.getText().toString());
+                returnIntent.putExtra("Code", code);
                 returnIntent.putExtra("action", currentAction);
+
                 setResult(RESULT_OK,returnIntent);
+                Log.d(TAG, "onClick: before finish()");
                 finish();
             }
         });

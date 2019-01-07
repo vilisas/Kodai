@@ -1,4 +1,4 @@
-package lt.sutemos.kodai.Utils;
+package lt.sutemos.kodai.utils;
 
 import android.app.Activity;
 import android.view.View;

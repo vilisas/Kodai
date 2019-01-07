@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -13,16 +14,25 @@ public interface CodeDao {
     @Query("SELECT * FROM code")
     List<Code> getAll();
 
-    @Query("SELECT * FROM code WHERE id IN (:userIds)")
-    List<Code> loadAllByIds(int[] userIds);
+    @Query("SELECT * FROM code WHERE id IN (:codeIds)")
+    List<Code> loadAllByIds(int[] codeIds);
 
-    @Query("SELECT * FROM code WHERE address LIKE :addr LIMIT 1")
-    Code findByAddress(String addr);
+    @Query("SELECT * FROM code WHERE address LIKE :addr")
+    List<Code> findAllByAddress(String addr);
 
     @Insert
-    void insertAll(Code... users);
+    void insertAll(Code... codes);
 
     @Delete
-    void delete(Code user);
+    void delete(Code codes);
+
+    @Query("DELETE FROM code WHERE id = :codeId")
+    void deleteById(Integer codeId);
+
+    @Update
+    void update(Code irasas);
+
+    @Query("DELETE FROM code")
+    void clearDatabase();
 
 }

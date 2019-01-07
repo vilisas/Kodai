@@ -1,17 +1,12 @@
 package lt.sutemos.kodai;
 
 
-import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
-import android.arch.persistence.room.Room;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,17 +26,17 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
-import lt.sutemos.kodai.Adapters.MyAdapter;
-import lt.sutemos.kodai.Models.Irasas;
-import lt.sutemos.kodai.Models.KodaiViewModel;
-import lt.sutemos.kodai.Utils.Util;
+import lt.sutemos.kodai.adapters.MyAdapter;
 import lt.sutemos.kodai.database.AppDatabase;
+import lt.sutemos.kodai.database.Code;
+import lt.sutemos.kodai.models.KodaiViewModel;
+import lt.sutemos.kodai.utils.DatabaseInitializer;
+import lt.sutemos.kodai.utils.Util;
 
-//import static lt.sutemos.kodai.Utils.Util.REQUEST_IMPORT_CSV_FILE;
-import static lt.sutemos.kodai.Utils.Util.*;
+import static lt.sutemos.kodai.utils.Util.*;
 
 public class MainActivity extends AppCompatActivity {
-//    public final int REQUEST_CODE = 1;
+    public final String TAG = "MainActivity.class";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private EditText searchEditText;
@@ -49,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private KodaiViewModel kodaiViewModel;
     private boolean exitNow = false;
     private File csvImportFile;
-    private MenuInflater menuInflater;
+    private AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,27 +52,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
+        appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
+        kodaiViewModel.setAppDatabase(appDatabase);
 
-        kodaiViewModel.setDb( Room.inMemoryDatabaseBuilder(getApplicationContext(),
-                AppDatabase.class).build());
+        DatabaseInitializer.populateAsync(appDatabase);
+//        DatabaseInitializer.populateSync(appDatabase);
 
-//        kodaiViewModel.setDb( Room.databaseBuilder(getApplicationContext(),
-//                AppDatabase.class, "kodai").build());
-
-        csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
-        List<Irasas> irasai = null;
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            irasai = Util.loadEntriesFromCSV(csvImportFile);
-        } else {
-            Log.i(getClass().toString(),"Can't read codes from external storage");
-        }
-
-        if (irasai!= null && irasai.size() >0) {
-            kodaiViewModel.setKodai(irasai);
-        } else {
-//            kodaiViewModel.setKodai(Util.generateDummyData());
-            kodaiViewModel.addKodai(Util.generateDummyData());
-        }
+//        csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
+//        List<Code> irasai = null;
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+//            irasai = Util.loadEntriesFromCSV(csvImportFile);
+//        } else {
+//            Log.i(getClass().toString(),"Can't read codes from external storage");
+//        }
+//
+//        if (irasai!= null && irasai.size() >0) {
+//            kodaiViewModel.setKodai(irasai);
+//        } else {
+//            kodaiViewModel.addKodai(Util.generateDummyData());
+//        }
 
 
         clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
@@ -180,11 +173,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = null;
+        Code code = null;
 
         Log.d("result","requestCode=" + requestCode + ", resultCode="+ resultCode);
 
         if (data != null){
             bundle = data.getExtras();
+            if (bundle!= null && Code.class.isInstance(bundle.getSerializable("Code"))){
+                code= (Code) bundle.getSerializable("Code");
+                Log.d(TAG, "onActivityResult: bundle != null && code is Code");
+            }
         }
 
         if ((requestCode == REQUEST_CREATE_ENTRY || requestCode == REQUEST_EDIT_ENTRY) && bundle == null){
@@ -196,7 +194,9 @@ public class MainActivity extends AppCompatActivity {
                 switch (resultCode){
 //                  add entry
                     case RESULT_OK:
-                        addNewEntry(bundle);
+                        if (Code.class.isInstance(code)){
+                            kodaiViewModel.add((Code) code);
+                        }
                         break;
                         default:
                 }
@@ -207,11 +207,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (resultCode){
 //                  update entry
                     case RESULT_OK:
-                        updateEntry(bundle);
+                        kodaiViewModel.update(code);
                         break;
 //                  delete entry
                     case RESULT_FIRST_USER:
-                        kodaiViewModel.delete(bundle.getInt("id"));
+                        kodaiViewModel.delete(code);
                         updateAdapter();
                         break;
                     default:
@@ -273,34 +273,15 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, Util.REQUEST_CREATE_ENTRY);
     }
 
-    private void addNewEntry(Bundle bundle){
-        kodaiViewModel.add(
-                bundle.getString("address"),
-                bundle.getString("code"),
-                bundle.getString("info")
-        );
-        updateAdapter();
-    }
-
-    private void updateEntry(Bundle bundle){
-        Irasas irasas = new Irasas(
-                bundle.getInt("id"),
-                bundle.getString("address"),
-                bundle.getString("code"),
-                bundle.getString("info")
-        );
-        kodaiViewModel.update(irasas);
-        updateAdapter();
-    }
-
     private void importCsvFile(Uri uri){
         Log.d("Import/URI", uri.getPath());
 
-        List<Irasas> irasai = Util.loadEntriesFromURI(getApplicationContext(), uri);
+        List<Code> irasai = Util.loadEntriesFromURI(getApplicationContext(), uri);
             if (irasai!= null) {
                 Log.v("importCsvFile()", "got " + irasai.size() + " entries");
-//                kodaiViewModel.addKodai(irasai);
-                kodaiViewModel.getKodai().merge(irasai);
+                kodaiViewModel.addKodai(irasai);
+//                kodaiViewModel.getKodai().merge(irasai);
+
                 updateAdapter();
             } else{
                 Log.d("Import/result", "result is null");
@@ -309,5 +290,11 @@ public class MainActivity extends AppCompatActivity {
     private void exportCsvFile(Uri uri){
         Log.d("Export/URI", uri.getPath());
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        AppDatabase.destroyInstance();
+        super.onDestroy();
     }
 }
