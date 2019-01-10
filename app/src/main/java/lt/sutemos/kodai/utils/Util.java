@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +88,50 @@ public class Util {
         return null;
     }
 
+    /**
+     * Saves entries to CSV file, returns true if saved, false otherwise
+     * @param context
+     * @param entries
+     * @param uri
+     * @return
+     */
+    public static boolean saveEntriesToURI(Context context, List<Code> entries, Uri uri){
+
+        OutputStream outputStream;
+        try {
+            outputStream = context.getContentResolver().openOutputStream(uri);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(outputStream));
+            for (Code entry : entries){
+                if (entry != null) {
+                        String csvLine[] = {
+                                entry.getAddress(),
+                                entry.getCode(),
+                                entry.getInfo()
+                        };
+                        csvWriter.writeNext(csvLine);
+                    }
+                }
+            csvWriter.close();
+            }
+                catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        return true;
+    }
+
+    /**
+     * loads entries from CSV file, returns List of Code entries
+     * @param context
+     * @param uri
+     * @return
+     */
     public static List<Code> loadEntriesFromURI(Context context, Uri uri){
 
         Log.v("Util","started");
@@ -106,10 +153,7 @@ public class Util {
             Log.e("Not Found","File not found");
             return null;
         }
-
         Log.v("Util","inputStream is not null");
-
-
         try {
             CSVReader reader = new CSVReader(new InputStreamReader(inputStream));
             String[] nextLine;
@@ -137,8 +181,6 @@ public class Util {
             Log.d("loadEntriesFromCSV:", "IO Exception "+ e.getCause());
             e.printStackTrace();
         }
-
-
         return null;
     }
 

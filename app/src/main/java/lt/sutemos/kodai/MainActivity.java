@@ -284,6 +284,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private void exportCsvFile(Uri uri){
         Log.d("Export/URI", uri.getPath());
+        List<Code> irasai = kodaiViewModel.getAppDatabase().codeDao().getAll();
+        saveEntriesToURI(getApplicationContext(), irasai, uri);
+
     }
 
     @Override
