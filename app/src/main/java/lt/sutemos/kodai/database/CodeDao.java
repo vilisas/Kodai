@@ -1,5 +1,11 @@
 package lt.sutemos.kodai.database;
 
+/**
+ * Code DAO
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
+
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;

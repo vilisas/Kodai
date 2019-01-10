@@ -1,12 +1,15 @@
 package lt.sutemos.kodai.database;
 
+/**
+ * Database Entry
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Code implements Serializable {

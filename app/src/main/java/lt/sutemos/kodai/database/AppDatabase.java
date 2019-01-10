@@ -1,5 +1,11 @@
 package lt.sutemos.kodai.database;
 
+/**
+ * Room database helpes
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
+
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;

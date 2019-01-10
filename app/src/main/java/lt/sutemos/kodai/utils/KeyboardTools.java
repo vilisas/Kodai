@@ -1,5 +1,10 @@
 package lt.sutemos.kodai.utils;
 
+/**
+ * Keyboard Hiding Utility
+ * https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
+ */
+
 import android.app.Activity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;

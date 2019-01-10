@@ -1,5 +1,9 @@
 package lt.sutemos.kodai.utils;
 
+/**
+ * Helper utilities
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
 
 import android.content.Context;
 import android.net.Uri;

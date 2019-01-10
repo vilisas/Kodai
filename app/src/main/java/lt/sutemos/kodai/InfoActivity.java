@@ -1,5 +1,11 @@
 package lt.sutemos.kodai;
 
+/**
+ * Info Activity
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

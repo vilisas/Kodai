@@ -1,5 +1,11 @@
 package lt.sutemos.kodai.adapters;
 
+/**
+ * List View adaptas
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

@@ -1,5 +1,11 @@
 package lt.sutemos.kodai.utils;
 
+/**
+ * Initial Data Generator
+ * Vilius Bilinkevicius, 2019
+ */
+
+
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;

@@ -1,5 +1,10 @@
 package lt.sutemos.kodai;
 
+/**
+ * Main Activity
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;

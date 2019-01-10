@@ -1,9 +1,12 @@
 package lt.sutemos.kodai.models;
 
+/**
+ * Main Activity View Model
+ * Created by Vilius Bilinkevicius on 2019.01
+ */
+
 import android.arch.lifecycle.ViewModel;
-
 import java.util.List;
-
 import lt.sutemos.kodai.database.AppDatabase;
 import lt.sutemos.kodai.database.Code;
 
