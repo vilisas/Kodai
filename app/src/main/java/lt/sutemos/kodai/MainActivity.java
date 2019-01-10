@@ -44,19 +44,20 @@ public class MainActivity extends AppCompatActivity {
     private KodaiViewModel kodaiViewModel;
     private boolean exitNow = false;
     private File csvImportFile;
-    private AppDatabase appDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        AppDatabase appDatabase;
         kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
-        appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
-        kodaiViewModel.setAppDatabase(appDatabase);
+        if (kodaiViewModel.getAppDatabase() == null) {
+            appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
+            kodaiViewModel.setAppDatabase(appDatabase);
+        }
 
-        DatabaseInitializer.populateAsync(appDatabase);
-//        DatabaseInitializer.populateSync(appDatabase);
+//        DatabaseInitializer.populateAsync(kodaiViewModel.getAppDatabase());
 
 //        csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
 //        List<Code> irasai = null;
@@ -208,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
 //                  update entry
                     case RESULT_OK:
                         kodaiViewModel.update(code);
+                        updateAdapter();
                         break;
 //                  delete entry
                     case RESULT_FIRST_USER:
@@ -262,7 +264,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void search(){
-        kodaiViewModel.setFilter(searchEditText.getText().toString());
+        // Using full text search, so adding % before and after search keyword if it's not empty
+        StringBuilder keyword = new StringBuilder();
+        String searchString = String.valueOf(searchEditText.getText().toString());
+        if (!searchString.isEmpty()) {
+            keyword.append("%").append(searchEditText.getText().toString()).append("%");
+        }
+        kodaiViewModel.setFilter(keyword.toString());
+//        kodaiViewModel.setFilter(searchEditText.getText().toString());
         updateAdapter();
 //        KeyboardTools.hide(this);
     }

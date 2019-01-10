@@ -11,15 +11,12 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CodeDao codeDao();
     public static AppDatabase getAppDatabase(Context context){
         if (appDatabaseInstance == null) {
-            appDatabaseInstance = Room.inMemoryDatabaseBuilder(context.getApplicationContext(),AppDatabase.class)
-                    .allowMainThreadQueries()
-                    .build();
-//            appDatabaseInstance =
-//                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "kodai")
-//                            // allow queries on the main thread.
-//                            // Don't do this on a real app! See PersistenceBasicSample for an example.
-//                            .allowMainThreadQueries()
-//                            .build();
+            appDatabaseInstance =
+                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "kodai")
+                            // allow queries on the main thread.
+                            // Don't do this on a real app! See PersistenceBasicSample for an example.
+                            .allowMainThreadQueries()
+                            .build();
         }
         return appDatabaseInstance;
 
