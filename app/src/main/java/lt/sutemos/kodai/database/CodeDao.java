@@ -21,7 +21,10 @@ public interface CodeDao {
     List<Code> findAllByAddress(String addr);
 
     @Insert
-    void insertAll(Code... codes);
+    void insertAll(Code... code);
+
+    @Insert
+    void insertList(List<Code> codes);
 
     @Delete
     void delete(Code codes);

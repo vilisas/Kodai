@@ -33,12 +33,12 @@ public class InfoActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        deleteImageButton = (ImageButton) findViewById(R.id.aiDeleteButtonID);
-        cancelButton = (Button) findViewById(R.id.aiCancelButtonID);
-        saveButton = (Button) findViewById(R.id.aiSaveButtonID);
-        addressEditText = (EditText) findViewById(R.id.aiAddressID);
-        codeEditText = (EditText) findViewById(R.id.aiCodeID);
-        extraInfoEditText = (EditText) findViewById(R.id.aiExtraInfoID);
+        deleteImageButton = findViewById(R.id.aiDeleteButtonID);
+        cancelButton = findViewById(R.id.aiCancelButtonID);
+        saveButton = findViewById(R.id.aiSaveButtonID);
+        addressEditText = findViewById(R.id.aiAddressID);
+        codeEditText = findViewById(R.id.aiCodeID);
+        extraInfoEditText = findViewById(R.id.aiExtraInfoID);
         Log.d(TAG, "onCreate: infoActivity");
 
         if (extras != null) {

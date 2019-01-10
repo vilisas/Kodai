@@ -13,7 +13,7 @@ public class CodeListTest {
     Code irasas;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         codeList = new CodeListOld();
 //        List<Code> irasai = new ArrayList<>();
         irasas = new Code(1,"adresas","kodas","info");

@@ -30,7 +30,6 @@ import lt.sutemos.kodai.adapters.MyAdapter;
 import lt.sutemos.kodai.database.AppDatabase;
 import lt.sutemos.kodai.database.Code;
 import lt.sutemos.kodai.models.KodaiViewModel;
-import lt.sutemos.kodai.utils.DatabaseInitializer;
 import lt.sutemos.kodai.utils.Util;
 
 import static lt.sutemos.kodai.utils.Util.*;
@@ -52,32 +51,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         AppDatabase appDatabase;
         kodaiViewModel = ViewModelProviders.of(this).get(KodaiViewModel.class);
+        // open database once, if it's not opened yet.
         if (kodaiViewModel.getAppDatabase() == null) {
             appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
             kodaiViewModel.setAppDatabase(appDatabase);
         }
 
-//        DatabaseInitializer.populateAsync(kodaiViewModel.getAppDatabase());
+        clearTextButton = findViewById(R.id.imageButtonClearText);
+        searchEditText = findViewById(R.id.editTextSearch);
 
-//        csvImportFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.default_filename));
-//        List<Code> irasai = null;
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-//            irasai = Util.loadEntriesFromCSV(csvImportFile);
-//        } else {
-//            Log.i(getClass().toString(),"Can't read codes from external storage");
-//        }
-//
-//        if (irasai!= null && irasai.size() >0) {
-//            kodaiViewModel.setKodai(irasai);
-//        } else {
-//            kodaiViewModel.addKodai(Util.generateDummyData());
-//        }
-
-
-        clearTextButton = (ImageButton) findViewById(R.id.imageButtonClearText);
-        searchEditText = (EditText) findViewById(R.id.editTextSearch);
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewID);
+        recyclerView = findViewById(R.id.recyclerViewID);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new MyAdapter(this, kodaiViewModel);
@@ -196,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
 //                  add entry
                     case RESULT_OK:
                         if (Code.class.isInstance(code)){
-                            kodaiViewModel.add((Code) code);
+                            kodaiViewModel.add(code);
+                            updateAdapter();
                         }
                         break;
                         default:
@@ -244,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+//        TODO: reset exitNow somewhere to false
         if (exitNow) {
             super.onBackPressed();
             return;
@@ -256,8 +241,12 @@ public class MainActivity extends AppCompatActivity {
         finish();
 
     }
+
+    /**
+     * updates ListView
+     */
     private void updateAdapter(){
-        // atnaujina irasu saraso vaizda
+        exitNow = false;        // reset back button
         adapter = new MyAdapter(this, kodaiViewModel);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -271,9 +260,7 @@ public class MainActivity extends AppCompatActivity {
             keyword.append("%").append(searchEditText.getText().toString()).append("%");
         }
         kodaiViewModel.setFilter(keyword.toString());
-//        kodaiViewModel.setFilter(searchEditText.getText().toString());
         updateAdapter();
-//        KeyboardTools.hide(this);
     }
 
     private void createNewEntry(){
@@ -288,8 +275,7 @@ public class MainActivity extends AppCompatActivity {
         List<Code> irasai = Util.loadEntriesFromURI(getApplicationContext(), uri);
             if (irasai!= null) {
                 Log.v("importCsvFile()", "got " + irasai.size() + " entries");
-                kodaiViewModel.addKodai(irasai);
-//                kodaiViewModel.getKodai().merge(irasai);
+                kodaiViewModel.getAppDatabase().codeDao().insertList(irasai);
 
                 updateAdapter();
             } else{
@@ -298,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private void exportCsvFile(Uri uri){
         Log.d("Export/URI", uri.getPath());
-
     }
 
     @Override
