@@ -6,12 +6,16 @@ package lt.sutemos.kodai;
  */
 
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +39,7 @@ import lt.sutemos.kodai.adapters.MyAdapter;
 import lt.sutemos.kodai.database.AppDatabase;
 import lt.sutemos.kodai.database.Code;
 import lt.sutemos.kodai.models.KodaiViewModel;
+import lt.sutemos.kodai.utils.Permissions;
 import lt.sutemos.kodai.utils.Util;
 
 import static lt.sutemos.kodai.utils.Util.*;
@@ -78,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                 search();
             }
         });
+
+//        Permissions.checkEXTReadPermission(this);
+//        checkEXTWritePermission();
 
 
 
@@ -127,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 createNewEntry();
                 break;
             case R.id.menu_import: {
+                // TODO: permission request dialog appears after file selection
+                Permissions.checkEXTReadPermission(this);
 //                import file dialog
                 Intent intent = new Intent()
                         .setType("text/*")
@@ -136,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
             }
                 break;
             case R.id.menu_export: {
+                // TODO: permission request dialog appears after file selection
+                Permissions.checkEXTWritePermission(this);
                 Intent intent = new Intent()
                         .setType("text/*")
                         .setAction(Intent.ACTION_CREATE_DOCUMENT)
@@ -226,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
                     exportCsvFile(uri);
                 }
                 break;
+            case REQUEST_WRITE_PERMISSIONS:
+                break;
 
             default:
         }
@@ -299,4 +313,5 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase.destroyInstance();
         super.onDestroy();
     }
+
 }

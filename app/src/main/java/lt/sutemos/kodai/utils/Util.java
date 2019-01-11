@@ -34,7 +34,8 @@ public class Util {
     public static final int REQUEST_EDIT_ENTRY      =101;
     public static final int REQUEST_IMPORT_CSV_FILE =102;
     public static final int REQUEST_EXPORT_CSV_FILE =103;
-
+    public static final int REQUEST_READ_PERMISSIONS = 104;
+    public static final int REQUEST_WRITE_PERMISSIONS =105;
 
 
     /*
