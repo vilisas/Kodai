@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 
 import lt.sutemos.kodai.database.Code;
@@ -71,13 +72,19 @@ public class InfoActivity extends AppCompatActivity {
                     default:
             }
         }
+        deleteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), R.string.delete_hint, Toast.LENGTH_LONG).show();
+            }
+        });
 
         deleteImageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Toast.makeText(getApplicationContext(), R.string.msg_entry_deleted, Toast.LENGTH_LONG).show();
                 setResult(RESULT_FIRST_USER, getIntent());
                 finish();
-
                 return false;
             }
         });
@@ -95,6 +102,13 @@ public class InfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent returnIntent = getIntent();
                 Log.d(TAG, "onClick: saveButton");
+                // show toast with error message and return if empty
+                if (String.valueOf(addressEditText.getText()).isEmpty()){
+                    addressEditText.requestFocus();
+                    addressEditText.setBackgroundColor(getResources().getColor(R.color.colorEmptyField));
+                    Toast.makeText(getApplicationContext(), R.string.err_empty, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 code.setAddress(addressEditText.getText().toString());
                 code.setCode(codeEditText.getText().toString());
                 code.setInfo(extraInfoEditText.getText().toString());

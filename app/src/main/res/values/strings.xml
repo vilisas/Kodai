@@ -15,5 +15,8 @@
     <string name="menu_info">Apie</string>
     <string name="menu_exit">Išeiti</string>
     <string name="menu_settings">Nustatymai</string>
+    <string name="delete_hint">Norint ištrinti įrašą - paspausti ir palaikyti</string>
+    <string name="err_empty">Adresas negali būti tuščias</string>
+    <string name="msg_entry_deleted">Įrašas ištrintas</string>
 
 </resources>
