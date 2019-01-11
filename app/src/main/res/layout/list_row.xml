@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/adresasID"
-                android:layout_width="10dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/adresas"
@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="right"
                 android:text="@string/kodas"
                 android:textSize="18sp"
                 android:textStyle="bold" />
