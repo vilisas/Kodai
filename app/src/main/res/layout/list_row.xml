@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
@@ -36,7 +38,15 @@
                 android:gravity="right"
                 android:text="@string/kodas"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginRight="8sp"
+                />
+
+            <ImageView
+                android:id="@+id/infoArrowID"
+                android:layout_width="14sp"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/more_72x72" />
 
 
         </LinearLayout>

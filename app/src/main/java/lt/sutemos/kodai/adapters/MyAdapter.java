@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -49,6 +50,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         viewHolder.adresas.setText(listItems.get(i).getAddress());
         viewHolder.kodas.setText(listItems.get(i).getCode());
+        if (listItems.get(i).getInfo().isEmpty()) {
+            viewHolder.infoArrow.setVisibility(View.INVISIBLE);
+        } else {
+            viewHolder.infoArrow.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -66,6 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public TextView adresas;
         public TextView kodas;
+        public ImageView infoArrow;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -73,6 +81,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             itemView.setOnClickListener(this);
             adresas = itemView.findViewById(R.id.adresasID);
             kodas = itemView.findViewById(R.id.kodasID);
+            infoArrow = itemView.findViewById(R.id.infoArrowID);
         }
 
         @Override
