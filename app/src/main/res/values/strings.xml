@@ -8,10 +8,10 @@
     <string name="apply">Išsaugoti</string>
     <string name="additional_info">Papildoma informacija</string>
     <string name="press_back_once_more_msg">Paspausk dar sykį, kad programa užsidarytų.</string>
-    <string name="default_filename">kodai.txt</string>
-    <string name="import_csv">Importuoti</string>
-    <string name="clear_data">Išvalyti viską</string>
+    <string name="menu_import_csv">Importuoti</string>
     <string name="menu_export_csv">Eksportuoti</string>
+    <string name="clear_data">Išvalyti viską</string>
+    <string name="default_filename" translatable="false">kodai.txt</string>
     <string name="menu_info">Apie</string>
     <string name="menu_exit">Išeiti</string>
     <string name="menu_settings">Nustatymai</string>

@@ -9,7 +9,7 @@
     <item
         android:id="@+id/menu_import"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="@string/import_csv" />
+        android:title="@string/menu_import_csv" />
 
     <item
         android:id="@+id/menu_export"
