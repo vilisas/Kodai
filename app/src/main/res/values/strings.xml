@@ -21,5 +21,6 @@
     <string name="msg_no_ext_storage">Išorinė saugykla gali būti nepasiekiama</string>
     <string name="preferences_close">Uždaryti paspaudus \"Atgal\"</string>
     <string name="pref_import_action_title">Pasirinkti veiksmą importuojant duomenis</string>
+    <string name="about_msg">CRUD Demo, Vilius Bilinkevičius, 2019</string>
 
 </resources>

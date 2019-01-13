@@ -7,6 +7,7 @@ package lt.sutemos.kodai;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainPreferences.class));
                 break;
             case R.id.menu_about:
+                displayAboutDialog();
                 break;
             case R.id.menu_exit:
                 closeApp();
@@ -319,6 +322,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         AppDatabase.destroyInstance();
         super.onDestroy();
+    }
+    // just display simple message
+    private void displayAboutDialog(){
+        AlertDialog.Builder dialog;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault);
+        } else {
+            dialog = new AlertDialog.Builder(MainActivity.this);
+        }
+        dialog.setTitle("About");
+        dialog.setMessage(R.string.about_msg);
+        dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
+
     }
 
 }
