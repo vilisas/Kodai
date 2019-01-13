@@ -5,17 +5,15 @@ package lt.sutemos.kodai;
  * Created by Vilius Bilinkevicius on 2019.01
  */
 
-
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,13 +30,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.List;
 
 import lt.sutemos.kodai.adapters.MyAdapter;
 import lt.sutemos.kodai.database.AppDatabase;
 import lt.sutemos.kodai.database.Code;
 import lt.sutemos.kodai.models.KodaiViewModel;
+import lt.sutemos.kodai.preferences.MainPreferences;
 import lt.sutemos.kodai.utils.Permissions;
 import lt.sutemos.kodai.utils.Util;
 
@@ -52,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton clearTextButton;
     private KodaiViewModel kodaiViewModel;
     private boolean exitNow = false;
-    private File csvImportFile;
-
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MyAdapter(this, kodaiViewModel);
         recyclerView.setAdapter(adapter);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
         clearTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,10 +83,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
 //        Permissions.checkEXTReadPermission(this);
 //        checkEXTWritePermission();
-
-
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -160,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 updateAdapter();
                 break;
             case R.id.menu_settings:
+                startActivity(new Intent(this, MainPreferences.class));
                 break;
             case R.id.menu_about:
                 break;
@@ -248,8 +247,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        TODO: reset exitNow somewhere to false
-        if (exitNow) {
+        boolean closeOnBack = preferences.getBoolean("close_on_back",false);
+        if (!closeOnBack) {
             super.onBackPressed();
+            return;
+        }
+
+        if (exitNow) {
+//            super.onBackPressed();
+//            return;
+            closeApp();
             return;
         }
         exitNow = true;

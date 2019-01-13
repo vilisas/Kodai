@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".InfoActivity" />
+        <activity android:name=".preferences.MainPreferences" />
     </application>
 
 </manifest>

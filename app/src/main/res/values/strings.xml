@@ -19,5 +19,7 @@
     <string name="err_empty">Adresas negali būti tuščias</string>
     <string name="msg_entry_deleted">Įrašas ištrintas</string>
     <string name="msg_no_ext_storage">Išorinė saugykla gali būti nepasiekiama</string>
+    <string name="preferences_close">Uždaryti paspaudus \"Atgal\"</string>
+    <string name="pref_import_action_title">Pasirinkti veiksmą importuojant duomenis</string>
 
 </resources>

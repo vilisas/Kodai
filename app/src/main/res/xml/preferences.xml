@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="close_on_back"
+        android:title="@string/preferences_close" />
+
+        <ListPreference
+            android:title="@string/pref_import_action_title"
+            android:entries="@array/pref_import_action"
+            android:entryValues="@array/pref_import_values"
+            android:key="pref_import_action" />
+
+</PreferenceScreen>

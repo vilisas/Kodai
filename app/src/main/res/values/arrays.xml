@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_import_action">
+        <item>merge</item>
+        <item>overwrite</item>
+        <item>append</item>
+    </string-array>
+
+    <string-array name="pref_import_values">
+        <item>Apjungti</item>
+        <item>Užrašyti ant viršaus</item>
+        <item>Papildyti</item>
+    </string-array>
+
+
+</resources>

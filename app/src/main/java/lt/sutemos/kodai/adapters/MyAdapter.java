@@ -21,9 +21,9 @@ import java.util.List;
 
 import lt.sutemos.kodai.InfoActivity;
 import lt.sutemos.kodai.MainActivity;
+import lt.sutemos.kodai.R;
 import lt.sutemos.kodai.database.Code;
 import lt.sutemos.kodai.models.KodaiViewModel;
-import lt.sutemos.kodai.R;
 import lt.sutemos.kodai.utils.Util;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
